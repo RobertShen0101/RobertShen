@@ -31,7 +31,7 @@ document.addEventListener('mousemove', (e) => {
   const mouseX = e.clientX;
   const mouseY = e.clientY;
 
-    
+
   const scopeSize = 100; 
   scope.style.left = `${mouseX - scopeSize / 2}px`;
   scope.style.top = `${mouseY - scopeSize / 2}px`;
