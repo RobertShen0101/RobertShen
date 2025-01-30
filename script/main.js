@@ -17,6 +17,8 @@ const backgroundImage = new Image();
 enemyImage.src = enemyImagePath;
 backgroundImage.src = backgroundImagePath;
 
+let level = 1; 
+
 let score = 0;
 const scoreDisplay = document.getElementById('scoreDisplay');
 
@@ -165,23 +167,11 @@ function startEnemyMovement() {
 }
 
 function checkWinCondition() {
-  if (score >= 10) {
-    showWinMessage();
-  }
-}
+  if (score >= 10) {  
+    showLevelUpMessage();  
 
-function showWinMessage() {
-  const winMessage = document.createElement('div');
-  winMessage.textContent = 'You Win!';
-  winMessage.style.position = 'absolute';
-  winMessage.style.top = '50%';
-  winMessage.style.left = '50%';
-  winMessage.style.transform = 'translate(-50%, -50%)';
-  winMessage.style.fontSize = '60px';
-  winMessage.style.color = 'green';
-  winMessage.style.textShadow = '2px 2px 5px rgba(0, 0, 0, 0.7)';
-  winMessage.style.zIndex = '1000';
-  document.body.appendChild(winMessage);
+    resetGame();
+  }
 }
 
 const reloadDisplayElement = document.createElement('div');
@@ -194,3 +184,32 @@ reloadDisplayElement.style.fontSize = '30px';
 reloadDisplayElement.style.color = 'red';
 reloadDisplayElement.style.display = 'none';
 document.body.appendChild(reloadDisplayElement);
+
+function showLevelUpMessage() {
+  const levelUpMessage = document.createElement('div');
+  levelUpMessage.textContent = `Level ${level} Complete!`;
+  levelUpMessage.style.position = 'absolute';
+  levelUpMessage.style.top = '50%';
+  levelUpMessage.style.left = '50%';
+  levelUpMessage.style.transform = 'translate(-50%, -50%)';
+  levelUpMessage.style.fontSize = '60px';
+  levelUpMessage.style.color = 'blue';
+  levelUpMessage.style.textShadow = '2px 2px 5px rgba(0, 0, 0, 0.7)';
+  levelUpMessage.style.zIndex = '1000';
+  document.body.appendChild(levelUpMessage);
+
+  setTimeout(() => {
+    levelUpMessage.style.display = 'none';
+  }, 3000);  
+}
+
+function resetGame() {
+  score = 0;
+  enemies.length = 0;  
+  drawBackground();
+  generateEnemy();
+  drawEnemies();
+  startEnemyMovement();
+  startBackgroundMusic(); 
+}
+
