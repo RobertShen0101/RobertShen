@@ -169,7 +169,7 @@ function startEnemyMovement() {
 function checkWinCondition() {
   if (score >= 10) {  
     showLevelUpMessage();  
-
+    level++;
     resetGame();
   }
 }
