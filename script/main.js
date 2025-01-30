@@ -23,16 +23,29 @@ const timerDisplay = document.getElementById('timerDisplay');
 
 const numEnemies = 10; 
 const enemies = []; 
+const enemySpawnPoints = [
+  { x: 100, y: 150 },
+  { x: 250, y: 300 },
+  { x: 400, y: 100 },
+  { x: 550, y: 350 },
+  { x: 700, y: 200 },
+  { x: 850, y: 450 },
+  { x: 300, y: 500 },
+  { x: 500, y: 250 },
+  { x: 650, y: 400 },
+  { x: 800, y: 150 }
+];
 
 function generateEnemy() {
   for (let i = 0; i < numEnemies; i++) {
-    const x = Math.random() * canvas.width;
-    const y = Math.random() * canvas.height;
+    const spawnPoint = enemySpawnPoints[i % enemySpawnPoints.length];
+    //const x = Math.random() * canvas.width;
+    //const y = Math.random() * canvas.height;
     const speedX = (Math.random() - 0.5) * 2; 
     const speedY = (Math.random() - 0.5) * 2;
     enemies.push({
-      x: x,
-      y: y,
+      x: spawnPoint.x,
+      y: spawnPoint.y,
       width: 80,
       height: 80,
       image: enemyImage,
@@ -71,29 +84,38 @@ let scopeSize = 100;
 document.addEventListener('mousemove', (e) => {
   const mouseX = e.clientX;
   const mouseY = e.clientY;
-  scope.style.left = `${mouseX - scopeSize / 2}px`;
-  scope.style.top = `${mouseY - scopeSize / 2}px`;
+  updateScopePosition(mouseX, mouseY);
 });
 
 canvas.addEventListener('mouseup', function(event) {
   if (event.button === 2) { 
     event.preventDefault();
-    scope.style.width = '100px';
-    scope.style.height = '100px';
-    scope.style.backgroundSize = 'cover'; 
     scopeSize = 100;
+    scope.style.width = `${scopeSize}px`;
+    scope.style.height = `${scopeSize}px`;
+    const mouseX = event.clientX;
+    const mouseY = event.clientY;
+    updateScopePosition(mouseX, mouseY);
   }
 });
+
+function updateScopePosition(mouseX, mouseY) {
+  scope.style.left = `${mouseX - scopeSize / 2}px`;
+  scope.style.top = `${mouseY - scopeSize / 2}px`;
+}
 
 canvas.style.cursor = 'none';
 
 canvas.addEventListener('mousedown', function(event) {
   if (event.button === 2) { 
     event.preventDefault();
-    scope.style.width = '200px';
-    scope.style.height = '200px';
+    const prevSize = scopeSize;
     scopeSize = 200;
-    scope.style.backgroundSize = 'cover';  
+    const sizeDiff = scopeSize - prevSize;
+    scope.style.width = `${scopeSize}px`;
+    scope.style.height = `${scopeSize}px`;
+    scope.style.left = `${mouseX - scopeSize / 2}px`;
+    scope.style.top = `${mouseY - scopeSize / 2}px`; 
   }
   if (event.button === 0) {
     const mouseX = event.clientX - canvas.getBoundingClientRect().left;
