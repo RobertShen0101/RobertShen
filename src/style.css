@@ -35,7 +35,7 @@ body, html {
     align-items: center;
     height: 100vh;
     text-align: center;
-    background: url('homepage.jpg') no-repeat center center;
+    background: url('image/homepage.jpg') no-repeat center center;
     background-size: cover;
   }
 

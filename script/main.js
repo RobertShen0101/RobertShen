@@ -2,8 +2,8 @@ import { SniperScope } from './jingtou.js';
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-const enemyImagePath = 'src/enemy.png';
-const backgroundImagePath = 'src/background_1.png';
+const enemyImagePath = 'src/image/enemy.png';
+const backgroundImagePath = 'src/image/background_1.png';
 const backgroundMusic = new Audio('src/background_music1.mp3');
 
 backgroundMusic.loop = true; 
