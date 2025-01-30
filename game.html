@@ -8,8 +8,12 @@
 </head>
 
 <body>
-    
-    <div class="game-container">
+    <div id="game-cover" class="game-cover">
+        <h1>Lone Hero SHB:</h1>
+        <h1>The Last Stand of Longbin Building</h1>
+        <button id="start-button">Begin</button>
+    </div>
+    <div class="game-container" style="display: none;">
         <canvas id="gameCanvas" width="1400" height="800"></canvas>
         <div id="sniper-scope"></div>
     </div>
@@ -20,7 +24,7 @@
     <div id="timerDisplay" style="position: absolute; top: 60px; left: 1500px; font-size: 40px; color: black;">
         Time: 00:00
     </div>
-
+    <script src="script/button.js"></script>
     <script src="script/main.js"></script>
 </body>
 

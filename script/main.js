@@ -4,8 +4,12 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const enemyImagePath = 'src/enemy.png';
 
+const backgroundImagePath = 'src/background_1.png';
+
 const enemyImage = new Image();
+const backgroundImage = new Image();
 enemyImage.src = enemyImagePath;
+backgroundImage.src = backgroundImagePath;
 
 let score = 0;
 const scoreDisplay = document.getElementById('scoreDisplay');
@@ -30,13 +34,18 @@ function generateEnemy() {
   }
 }
 
-enemyImage.onload = () => {
+backgroundImage.onload = () => {
+  drawBackground();
   generateEnemy();
   drawEnemies();
 };
 
+function drawBackground() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height); 
+  ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height); 
+}
+
 function drawEnemies() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
   enemies.forEach(enemy => {
     ctx.drawImage(enemy.image, enemy.x, enemy.y, enemy.width, enemy.height);
   });
@@ -86,6 +95,7 @@ canvas.addEventListener('mousedown', function(event) {
       if (mouseX >= enemy.x && mouseX <= enemy.x + enemy.width &&
           mouseY >= enemy.y && mouseY <= enemy.y + enemy.height) {
         enemies.splice(i, 1); 
+        drawBackground();
         drawEnemies(); 
         updateScore(); 
         break;
