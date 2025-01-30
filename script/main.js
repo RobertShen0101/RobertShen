@@ -1,12 +1,11 @@
-const scope = document.getElementById('sniper-scope');
+import { SniperScope } from './jingtou.js';
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const enemyImagePath = 'src/enemy.png';
-
 const backgroundImagePath = 'src/background_1.png';
+const backgroundMusic = new Audio('src/background_music1.mp3');
 
-const backgroundMusic = new Audio('src/background_music1.mp3'); 
 backgroundMusic.loop = true; 
 backgroundMusic.volume = 0.2;
 
@@ -36,11 +35,11 @@ const enemySpawnPoints = [
   { x: 800, y: 150 }
 ];
 
+const sniperScope = new SniperScope(canvas); // 初始化瞄准镜
+
 function generateEnemy() {
   for (let i = 0; i < numEnemies; i++) {
     const spawnPoint = enemySpawnPoints[i % enemySpawnPoints.length];
-    //const x = Math.random() * canvas.width;
-    //const y = Math.random() * canvas.height;
     const speedX = (Math.random() - 0.5) * 2; 
     const speedY = (Math.random() - 0.5) * 2;
     enemies.push({
@@ -74,71 +73,8 @@ function drawEnemies() {
   });
 }
 
-scope.style.backgroundImage = 'url("src/jingtou.png")';
-scope.style.backgroundSize = 'cover'; 
-scope.style.width = '100px';  
-scope.style.height = '100px'; 
-
-let scopeSize = 100;
-
-document.addEventListener('mousemove', (e) => {
-  const mouseX = e.clientX;
-  const mouseY = e.clientY;
-  updateScopePosition(mouseX, mouseY);
-});
-
-canvas.addEventListener('mouseup', function(event) {
-  if (event.button === 2) { 
-    event.preventDefault();
-    scopeSize = 100;
-    scope.style.width = `${scopeSize}px`;
-    scope.style.height = `${scopeSize}px`;
-    const mouseX = event.clientX;
-    const mouseY = event.clientY;
-    updateScopePosition(mouseX, mouseY);
-  }
-});
-
-function updateScopePosition(mouseX, mouseY) {
-  scope.style.left = `${mouseX - scopeSize / 2}px`;
-  scope.style.top = `${mouseY - scopeSize / 2}px`;
-}
-
-canvas.style.cursor = 'none';
-
-canvas.addEventListener('mousedown', function(event) {
-  if (event.button === 2) { 
-    event.preventDefault();
-    const prevSize = scopeSize;
-    scopeSize = 200;
-    const sizeDiff = scopeSize - prevSize;
-    scope.style.width = `${scopeSize}px`;
-    scope.style.height = `${scopeSize}px`;
-    scope.style.left = `${mouseX - scopeSize / 2}px`;
-    scope.style.top = `${mouseY - scopeSize / 2}px`; 
-  }
-  if (event.button === 0) {
-    const mouseX = event.clientX - canvas.getBoundingClientRect().left;
-    const mouseY = event.clientY - canvas.getBoundingClientRect().top;
-    
-    for (let i = enemies.length - 1; i >= 0; i--) {
-      const enemy = enemies[i]; 
-
-      if (mouseX >= enemy.x && mouseX <= enemy.x + enemy.width &&
-          mouseY >= enemy.y && mouseY <= enemy.y + enemy.height) {
-        enemies.splice(i, 1); 
-        drawBackground();
-        drawEnemies(); 
-        updateScore(); 
-        checkWinCondition();
-        break;
-      }
-    }
-  }
-});
-
 function updateScore() {
-  score = score + 1;
+  score += 1;
   scoreDisplay.textContent = `Score: ${score}`;
 }
 
@@ -148,7 +84,6 @@ function updateTimer() {
   const seconds = time % 60;
   timerDisplay.textContent = `Time: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
-
 
 function moveEnemies() {
   enemies.forEach(enemy => {
@@ -167,11 +102,6 @@ function startBackgroundMusic() {
   backgroundMusic.play(); 
 }
 
-function stopBackgroundMusic() {
-  backgroundMusic.pause(); 
-  backgroundMusic.currentTime = 0; 
-}
-
 function startEnemyMovement() {
   setInterval(() => {
     moveEnemies();
@@ -181,7 +111,6 @@ function startEnemyMovement() {
 }
 
 setInterval(updateTimer, 1000);
-
 
 function checkWinCondition() {
   if (score >= 10) {
@@ -201,6 +130,4 @@ function showWinMessage() {
   winMessage.style.textShadow = '2px 2px 5px rgba(0, 0, 0, 0.7)';
   winMessage.style.zIndex = '1000';
   document.body.appendChild(winMessage);
-
-  canvas.removeEventListener('mousedown', handleMouseDown);
 }
