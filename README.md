@@ -68,7 +68,7 @@ open index.html
 ## File Structure
 
 ```bash
-sniper-game/
+RobertShen/
 │
 ├── src/
 │   ├── image/
