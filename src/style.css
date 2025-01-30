@@ -35,15 +35,17 @@ body, html {
     align-items: center;
     height: 100vh;
     text-align: center;
-    background: url('src/homepage.jpg') no-repeat center center;
+    background: url('homepage.jpg') no-repeat center center;
     background-size: cover;
   }
+
   h1 {
     font-size: 60px;
     color: red;
     margin-top: 20px;
     line-height: 0.8;
   }
+
   #start-button {
     margin-top: auto;
     margin-bottom: 80px;

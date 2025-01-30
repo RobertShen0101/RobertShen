@@ -24,12 +24,16 @@ function generateEnemy() {
   for (let i = 0; i < numEnemies; i++) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height;
+    const speedX = (Math.random() - 0.5) * 2; 
+    const speedY = (Math.random() - 0.5) * 2;
     enemies.push({
       x: x,
       y: y,
       width: 80,
       height: 80,
-      image: enemyImage
+      image: enemyImage,
+      speedX: speedX,
+      speedY: speedY
     });
   }
 }
@@ -38,6 +42,7 @@ backgroundImage.onload = () => {
   drawBackground();
   generateEnemy();
   drawEnemies();
+  startEnemyMovement();
 };
 
 function drawBackground() {
@@ -114,6 +119,28 @@ function updateTimer() {
   const minutes = Math.floor(time / 60);
   const seconds = time % 60;
   timerDisplay.textContent = `Time: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+
+function moveEnemies() {
+  enemies.forEach(enemy => {
+    enemy.x += enemy.speedX;
+    enemy.y += enemy.speedY;
+    if (enemy.x <= 0 || enemy.x + enemy.width >= canvas.width) {
+      enemy.speedX = -enemy.speedX;
+    }
+    if (enemy.y <= 0 || enemy.y + enemy.height >= canvas.height) {
+      enemy.speedY = -enemy.speedY;
+    }
+  });
+}
+
+function startEnemyMovement() {
+  setInterval(() => {
+    moveEnemies();
+    drawBackground();
+    drawEnemies();
+  }, 1000 / 60);  
 }
 
 setInterval(updateTimer, 1000);
