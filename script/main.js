@@ -7,6 +7,7 @@ const backgroundImagePath = 'src/image/background_1.png';
 const backgroundMusic = new Audio('src/background_music1.mp3');
 const shootSound = new Audio('src/music/shoot.mp3');
 const reloadSound = new Audio('src/music/reload.mp3');
+const getShotSound = new Audio('src/music/getshot.mp3');
 
 backgroundMusic.loop = true; 
 backgroundMusic.volume = 0.2;
@@ -71,6 +72,7 @@ sniperScope.onShoot = (mouseX, mouseY) => {
     const enemy = enemies[i];
     if (x >= enemy.x && x <= enemy.x + enemy.width &&
         y >= enemy.y && y <= enemy.y + enemy.height) {
+      getShotSound.play();
       enemies.splice(i, 1);
       drawBackground();
       drawEnemies();
@@ -190,5 +192,5 @@ reloadDisplayElement.style.left = '50%';
 reloadDisplayElement.style.transform = 'translateX(-50%)';
 reloadDisplayElement.style.fontSize = '30px';
 reloadDisplayElement.style.color = 'red';
-reloadDisplayElement.style.display = 'none'; // 初始隐藏
+reloadDisplayElement.style.display = 'none';
 document.body.appendChild(reloadDisplayElement);
