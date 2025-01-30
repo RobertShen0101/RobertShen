@@ -5,6 +5,8 @@ const ctx = canvas.getContext('2d');
 const enemyImagePath = 'src/image/enemy.png';
 const backgroundImagePath = 'src/image/background_1.png';
 const backgroundMusic = new Audio('src/background_music1.mp3');
+const shootSound = new Audio('src/music/shoot.mp3');
+const reloadSound = new Audio('src/music/reload.mp3');
 
 backgroundMusic.loop = true; 
 backgroundMusic.volume = 0.2;
@@ -36,8 +38,15 @@ const enemySpawnPoints = [
 ];
 
 const sniperScope = new SniperScope(canvas); 
+let canShoot = true; 
+const reloadDisplay = document.getElementById('reloadDisplay');
 
 sniperScope.onShoot = (mouseX, mouseY) => {
+  if (!canShoot) {
+    reloadDisplayElement.style.display = 'block';
+    return;
+  }
+  shootSound.play();
   const rect = canvas.getBoundingClientRect();
   const x = mouseX - rect.left;
   const y = mouseY - rect.top;
@@ -54,6 +63,12 @@ sniperScope.onShoot = (mouseX, mouseY) => {
       break;
     }
   }
+  reloadSound.play();
+  canShoot = false;
+  reloadDisplayElement.style.display = 'none'; // 隐藏 "Reloading" 提示
+  setTimeout(() => {
+    canShoot = true;
+  }, 2000);
 };
 
 function generateEnemy() {
@@ -150,3 +165,14 @@ function showWinMessage() {
   winMessage.style.zIndex = '1000';
   document.body.appendChild(winMessage);
 }
+
+const reloadDisplayElement = document.createElement('div');
+reloadDisplayElement.textContent = 'Reloading';
+reloadDisplayElement.style.position = 'absolute';
+reloadDisplayElement.style.bottom = '10px';
+reloadDisplayElement.style.left = '50%';
+reloadDisplayElement.style.transform = 'translateX(-50%)';
+reloadDisplayElement.style.fontSize = '30px';
+reloadDisplayElement.style.color = 'red';
+reloadDisplayElement.style.display = 'none'; // 初始隐藏
+document.body.appendChild(reloadDisplayElement);

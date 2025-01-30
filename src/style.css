@@ -45,7 +45,7 @@ body, html {
       opacity: 1;
   }
   50% {
-      transform: scale(3) translateY(150px); 
+      transform: scale(2) translateY(150px); 
       opacity: 1;
   }
   100% {
