@@ -51,8 +51,14 @@ body, html {
     margin-bottom: 80px;
     padding: 60px 120px;
     font-size: 120px;
-    background-color: rgb(109, 85, 60); 
-    color: rgb(0, 0, 0); 
-    border: none; 
+    background-color: rgb(109, 85, 60);
+    color: rgb(0, 0, 0);
+    border: none;
     border-radius: 5px;
-  }
+    transition: all 0.2s ease; 
+}
+
+#start-button:hover {
+    transform: translateY(4px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); 
+}
