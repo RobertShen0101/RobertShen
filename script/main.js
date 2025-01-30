@@ -103,6 +103,7 @@ canvas.addEventListener('mousedown', function(event) {
         drawBackground();
         drawEnemies(); 
         updateScore(); 
+        checkWinCondition();
         break;
       }
     }
@@ -145,3 +146,25 @@ function startEnemyMovement() {
 
 setInterval(updateTimer, 1000);
 
+
+function checkWinCondition() {
+  if (score >= 10) {
+    showWinMessage();
+  }
+}
+
+function showWinMessage() {
+  const winMessage = document.createElement('div');
+  winMessage.textContent = 'You Win!';
+  winMessage.style.position = 'absolute';
+  winMessage.style.top = '50%';
+  winMessage.style.left = '50%';
+  winMessage.style.transform = 'translate(-50%, -50%)';
+  winMessage.style.fontSize = '60px';
+  winMessage.style.color = 'green';
+  winMessage.style.textShadow = '2px 2px 5px rgba(0, 0, 0, 0.7)';
+  winMessage.style.zIndex = '1000';
+  document.body.appendChild(winMessage);
+
+  canvas.removeEventListener('mousedown', handleMouseDown);
+}
