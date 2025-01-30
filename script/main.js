@@ -6,6 +6,10 @@ const enemyImagePath = 'src/enemy.png';
 
 const backgroundImagePath = 'src/background_1.png';
 
+const backgroundMusic = new Audio('src/background-music.mp3'); 
+backgroundMusic.loop = true; 
+backgroundMusic.volume = 0.2;
+
 const enemyImage = new Image();
 const backgroundImage = new Image();
 enemyImage.src = enemyImagePath;
@@ -43,6 +47,7 @@ backgroundImage.onload = () => {
   generateEnemy();
   drawEnemies();
   startEnemyMovement();
+  startBackgroundMusic();
 };
 
 function drawBackground() {
@@ -134,6 +139,15 @@ function moveEnemies() {
       enemy.speedY = -enemy.speedY;
     }
   });
+}
+
+function startBackgroundMusic() {
+  backgroundMusic.play(); 
+}
+
+function stopBackgroundMusic() {
+  backgroundMusic.pause(); 
+  backgroundMusic.currentTime = 0; 
 }
 
 function startEnemyMovement() {
