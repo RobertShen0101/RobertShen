@@ -16,6 +16,9 @@ const enemyImage = new Image();
 const backgroundImage = new Image();
 enemyImage.src = enemyImagePath;
 backgroundImage.src = backgroundImagePath;
+const gunImage = new Image();
+gunImage.src = 'src/image/gun.png';
+let gunX, gunY;
 
 let level = 1; 
 
@@ -56,6 +59,11 @@ const enemySpawnPoints = [
   { x: 800, y: 150 }
 ];
 
+gunImage.onload = () => {
+  gunX = canvas.width - gunImage.width - 10; 
+  gunY = canvas.height - gunImage.height - 10; 
+};
+
 const sniperScope = new SniperScope(canvas); 
 let canShoot = true; 
 const reloadDisplay = document.getElementById('reloadDisplay');
@@ -69,7 +77,9 @@ sniperScope.onShoot = (mouseX, mouseY) => {
   const rect = canvas.getBoundingClientRect();
   const x = mouseX - rect.left;
   const y = mouseY - rect.top;
-
+  const deltaX = x - gunX; 
+  const deltaY = y - gunY; 
+  const angle = Math.atan2(deltaY, deltaX);
   for (let i = enemies.length - 1; i >= 0; i--) {
     const enemy = enemies[i];
     if (x >= enemy.x && x <= enemy.x + enemy.width &&
@@ -78,6 +88,7 @@ sniperScope.onShoot = (mouseX, mouseY) => {
       enemies.splice(i, 1);
       drawBackground();
       drawEnemies();
+      drawGun(angle);
       updateScore();
       checkWinCondition();
       break;
@@ -92,6 +103,14 @@ sniperScope.onShoot = (mouseX, mouseY) => {
     canShoot = true;
   }, 2000);
 };
+
+function drawGun(angle) {
+  ctx.save(); 
+  ctx.translate(gunX + gunImage.width / 2, gunY + gunImage.height / 2);
+  ctx.rotate(angle); 
+  ctx.drawImage(gunImage, -gunImage.width / 2, -gunImage.height / 2);
+  ctx.restore(); 
+}
 
 function generateEnemy() {
   for (let i = 0; i < numEnemies; i++) {
