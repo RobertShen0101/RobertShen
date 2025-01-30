@@ -37,6 +37,25 @@ const enemySpawnPoints = [
 
 const sniperScope = new SniperScope(canvas); 
 
+sniperScope.onShoot = (mouseX, mouseY) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = mouseX - rect.left;
+  const y = mouseY - rect.top;
+
+  for (let i = enemies.length - 1; i >= 0; i--) {
+    const enemy = enemies[i];
+    if (x >= enemy.x && x <= enemy.x + enemy.width &&
+        y >= enemy.y && y <= enemy.y + enemy.height) {
+      enemies.splice(i, 1);
+      drawBackground();
+      drawEnemies();
+      updateScore();
+      checkWinCondition();
+      break;
+    }
+  }
+};
+
 function generateEnemy() {
   for (let i = 0; i < numEnemies; i++) {
     const spawnPoint = enemySpawnPoints[i % enemySpawnPoints.length];
