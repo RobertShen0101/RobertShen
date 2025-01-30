@@ -7,6 +7,9 @@ const enemyImagePath = 'src/enemy.png';
 const enemyImage = new Image();
 enemyImage.src = enemyImagePath;
 
+let score = 0;
+const scoreDisplay = document.getElementById('scoreDisplay');
+
 const numEnemies = 10; 
 const enemies = []; 
 
@@ -66,11 +69,15 @@ canvas.addEventListener('mousedown', function(event) {
         enemies.splice(i, 1); 
         //alert('你击中了一个敌人！');
         drawEnemies(); 
+        updateScore(); 
         break;
       }
     }
   }
 });
 
-
+function updateScore() {
+  score = score + 1;
+  scoreDisplay.textContent = `Score: ${score}`;
+}
 
