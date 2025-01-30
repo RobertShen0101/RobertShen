@@ -22,6 +22,22 @@ const scoreDisplay = document.getElementById('scoreDisplay');
 let time = 0; 
 const timerDisplay = document.getElementById('timerDisplay');
 
+const startButton = document.getElementById('start-button');
+const gameCover = document.getElementById('game-cover');
+const gameContainer = document.querySelector('.game-container');
+
+startButton.addEventListener('click', () => {
+  gameCover.style.display = 'none';
+  gameContainer.style.display = 'block';
+
+  document.getElementById('scoreDisplay').style.display = 'block';
+  document.getElementById('timerDisplay').style.display = 'block';
+  backgroundMusic.play();
+  startEnemyMovement();
+  setInterval(updateTimer, 1000);
+});
+
+
 const numEnemies = 10; 
 const enemies = []; 
 const enemySpawnPoints = [
@@ -65,7 +81,7 @@ sniperScope.onShoot = (mouseX, mouseY) => {
   }
   reloadSound.play();
   canShoot = false;
-  reloadDisplayElement.style.display = 'none'; // 隐藏 "Reloading" 提示
+  reloadDisplayElement.style.display = 'none';
   setTimeout(() => {
     canShoot = true;
   }, 2000);
@@ -143,8 +159,6 @@ function startEnemyMovement() {
     drawEnemies();
   }, 1000 / 60);  
 }
-
-setInterval(updateTimer, 1000);
 
 function checkWinCondition() {
   if (score >= 10) {

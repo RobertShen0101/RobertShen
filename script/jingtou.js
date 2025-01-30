@@ -7,7 +7,7 @@ export class SniperScope {
       this.isZooming = false;
       this.lastMouseX = 0;
       this.lastMouseY = 0;
-      this.onShoot = null; // 让外部绑定射击事件
+      this.onShoot = null; 
     
       this.initScope();
     }
