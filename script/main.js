@@ -57,16 +57,20 @@ canvas.addEventListener('mousedown', function(event) {
   if (event.button === 0) {
     const mouseX = event.clientX - canvas.getBoundingClientRect().left;
     const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+    
     for (let i = enemies.length - 1; i >= 0; i--) {
+      const enemy = enemies[i]; 
+
       if (mouseX >= enemy.x && mouseX <= enemy.x + enemy.width &&
           mouseY >= enemy.y && mouseY <= enemy.y + enemy.height) {
-        /*enemies.splice(i, 1);*/
-        alert('你击中了一个敌人！');
+        enemies.splice(i, 1); 
+        //alert('你击中了一个敌人！');
+        drawEnemies(); 
         break;
       }
     }
-    drawEnemies();
   }
 });
+
 
 
