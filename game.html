@@ -8,13 +8,30 @@
 </head>
 
 <body>
-    
-    <div class="game-container">
-        <canvas id="gameCanvas" width="1600" height="800"></canvas>
+    <div id="game-cover" class="game-cover">
+        <h1>Lone Hero SHB:</h1>
+        <h1>The Last Stand of Longbin Building</h1>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+        <button id="start-button">Begin</button>
+    </div>
+    <div class="game-container" style="display: none;">
+        <canvas id="gameCanvas" width="1400" height="800"></canvas>
         <div id="sniper-scope"></div>
-     </div>
-
-    <script src="script/main.js"></script>
+    </div>
+    <script src="script/button.js"></script>
+    <div id="reloadDisplay" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 30px; color: red; display: none;">
+        Reloading
+    </div>
+    <div id="scoreDisplay" style="position: absolute; top: 10px; left: 1500px; font-size: 40px; color: black; display: none;">
+        Score: 0
+    </div>
+    
+    <div id="timerDisplay" style="position: absolute; top: 60px; left: 1500px; font-size: 40px; color: black; display: none;">
+        Time: 00:00
+    </div>    
+    <script src="script/jingtou.js"></script>
+    <script type="module" src="script/main.js"></script>
+    
 </body>
 
 </html>
