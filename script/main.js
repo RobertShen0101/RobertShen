@@ -10,6 +10,9 @@ enemyImage.src = enemyImagePath;
 let score = 0;
 const scoreDisplay = document.getElementById('scoreDisplay');
 
+let time = 0; 
+const timerDisplay = document.getElementById('timerDisplay');
+
 const numEnemies = 10; 
 const enemies = []; 
 
@@ -80,4 +83,13 @@ function updateScore() {
   score = score + 1;
   scoreDisplay.textContent = `Score: ${score}`;
 }
+
+function updateTimer() {
+  time++;
+  const minutes = Math.floor(time / 60);
+  const seconds = time % 60;
+  timerDisplay.textContent = `Time: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+}
+
+setInterval(updateTimer, 1000);
 
