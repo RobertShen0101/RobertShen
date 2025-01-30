@@ -8,19 +8,33 @@ const enemyImage = new Image();
 enemyImage.src = enemyImagePath;
 
 const numEnemies = 10; 
+const enemies = []; 
 
-
-function generatenemy(){
+function generateEnemy() {
   for (let i = 0; i < numEnemies; i++) {
-    var x = Math.random() * canvas.width;
-    var y = Math.random() * canvas.height;
-    ctx.drawImage(enemyImage, x, y, 50, 50);
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    enemies.push({
+      x: x,
+      y: y,
+      width: 50,
+      height: 50,
+      image: enemyImage
+    });
   }
 }
 
 enemyImage.onload = () => {
-  generatenemy();
+  generateEnemy();
+  drawEnemies();
 };
+
+function drawEnemies() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  enemies.forEach(enemy => {
+    ctx.drawImage(enemy.image, enemy.x, enemy.y, enemy.width, enemy.height);
+  });
+}
 
 scope.style.backgroundImage = 'url("src/jingtou.png")';
 scope.style.backgroundSize = 'cover'; 
@@ -38,5 +52,20 @@ document.addEventListener('mousemove', (e) => {
 });
 
 canvas.style.cursor = 'none';
+
+canvas.addEventListener('mousedown', function(event) {
+  if (event.button === 0) {
+    const mouseX = event.clientX - canvas.getBoundingClientRect().left;
+    const mouseY = event.clientY - canvas.getBoundingClientRect().top;
+
+    for (const enemy of enemies) {
+      if (mouseX >= enemy.x && mouseX <= enemy.x + enemy.width &&
+          mouseY >= enemy.y && mouseY <= enemy.y + enemy.height) {
+        alert('你击中了一个敌人！');
+        break;
+      }
+    }
+  }
+});
 
 
