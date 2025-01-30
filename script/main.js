@@ -6,7 +6,7 @@ const enemyImagePath = 'src/enemy.png';
 
 const backgroundImagePath = 'src/background_1.png';
 
-const backgroundMusic = new Audio('src/background-music.mp3'); 
+const backgroundMusic = new Audio('src/background_music1.mp3'); 
 backgroundMusic.loop = true; 
 backgroundMusic.volume = 0.2;
 
