@@ -79,7 +79,9 @@ sniperScope.onShoot = (mouseX, mouseY) => {
       break;
     }
   }
-  reloadSound.play();
+  setTimeout(() => {
+    reloadSound.play();
+  }, 800);
   canShoot = false;
   reloadDisplayElement.style.display = 'none';
   setTimeout(() => {
