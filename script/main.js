@@ -23,8 +23,8 @@ function generateEnemy() {
     enemies.push({
       x: x,
       y: y,
-      width: 50,
-      height: 50,
+      width: 80,
+      height: 80,
       image: enemyImage
     });
   }
@@ -47,19 +47,35 @@ scope.style.backgroundSize = 'cover';
 scope.style.width = '100px';  
 scope.style.height = '100px'; 
 
+let scopeSize = 100;
+
 document.addEventListener('mousemove', (e) => {
   const mouseX = e.clientX;
   const mouseY = e.clientY;
-
-
-  const scopeSize = 100; 
   scope.style.left = `${mouseX - scopeSize / 2}px`;
   scope.style.top = `${mouseY - scopeSize / 2}px`;
+});
+
+canvas.addEventListener('mouseup', function(event) {
+  if (event.button === 2) { 
+    event.preventDefault();
+    scope.style.width = '100px';
+    scope.style.height = '100px';
+    scope.style.backgroundSize = 'cover'; 
+    scopeSize = 100;
+  }
 });
 
 canvas.style.cursor = 'none';
 
 canvas.addEventListener('mousedown', function(event) {
+  if (event.button === 2) { 
+    event.preventDefault();
+    scope.style.width = '200px';
+    scope.style.height = '200px';
+    scopeSize = 200;
+    scope.style.backgroundSize = 'cover';  
+  }
   if (event.button === 0) {
     const mouseX = event.clientX - canvas.getBoundingClientRect().left;
     const mouseY = event.clientY - canvas.getBoundingClientRect().top;
@@ -70,7 +86,6 @@ canvas.addEventListener('mousedown', function(event) {
       if (mouseX >= enemy.x && mouseX <= enemy.x + enemy.width &&
           mouseY >= enemy.y && mouseY <= enemy.y + enemy.height) {
         enemies.splice(i, 1); 
-        //alert('你击中了一个敌人！');
         drawEnemies(); 
         updateScore(); 
         break;
