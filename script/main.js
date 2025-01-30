@@ -35,7 +35,7 @@ const enemySpawnPoints = [
   { x: 800, y: 150 }
 ];
 
-const sniperScope = new SniperScope(canvas); // 初始化瞄准镜
+const sniperScope = new SniperScope(canvas); 
 
 function generateEnemy() {
   for (let i = 0; i < numEnemies; i++) {

@@ -5,33 +5,42 @@ export class SniperScope {
       this.scopeSize = 80;
       this.targetScopeSize = 80;
       this.isZooming = false;
-  
+      this.lastMouseX = 0;
+      this.lastMouseY = 0;
+      this.onShoot = null; // 让外部绑定射击事件
+    
       this.initScope();
     }
-  
+    
     initScope() {
       this.scope.style.backgroundImage = 'url("src/jingtou.png")';
       this.scope.style.backgroundSize = 'cover';
       this.scope.style.width = `${this.scopeSize}px`;
       this.scope.style.height = `${this.scopeSize}px`;
   
-      document.addEventListener('mousemove', (e) => this.updateScopePosition(e.clientX, e.clientY));
+      document.addEventListener('mousemove', (e) => {
+        this.lastMouseX = e.clientX;
+        this.lastMouseY = e.clientY;
+        this.updateScopePosition(this.lastMouseX, this.lastMouseY);
+      });
+  
       this.canvas.addEventListener('mousedown', (e) => this.handleMouseDown(e));
       this.canvas.addEventListener('mouseup', (e) => this.handleMouseUp(e));
-
-      document.addEventListener('contextmenu', (event) => event.preventDefault());
   
+      document.addEventListener('contextmenu', (event) => event.preventDefault());
       this.canvas.style.cursor = 'none';
     }
-  
+    
     handleMouseDown(event) {
       if (event.button === 2) { 
         event.preventDefault();
         this.targetScopeSize = 200;
         if (!this.isZooming) this.animateScopeSize();
+      } else if (event.button === 0) {
+        if (this.onShoot) this.onShoot(event.clientX, event.clientY);
       }
     }
-  
+    
     handleMouseUp(event) {
       if (event.button === 2) { 
         event.preventDefault();
@@ -39,7 +48,7 @@ export class SniperScope {
         if (!this.isZooming) this.animateScopeSize();
       }
     }
-  
+    
     animateScopeSize() {
       this.isZooming = true;
   
@@ -51,6 +60,8 @@ export class SniperScope {
         }
   
         this.scopeSize += (this.targetScopeSize - this.scopeSize) * 0.2;
+        this.updateScopePosition(this.lastMouseX, this.lastMouseY);
+  
         this.scope.style.width = `${this.scopeSize}px`;
         this.scope.style.height = `${this.scopeSize}px`;
   
@@ -61,8 +72,9 @@ export class SniperScope {
     }
   
     updateScopePosition(mouseX, mouseY) {
-      this.scope.style.left = `${mouseX - this.scopeSize / 2}px`;
-      this.scope.style.top = `${mouseY - this.scopeSize / 2}px`;
+      const offset = this.scopeSize / 2;
+      this.scope.style.left = `${mouseX - offset}px`;
+      this.scope.style.top = `${mouseY - offset}px`;
     }
   }
   
