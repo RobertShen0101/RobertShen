@@ -5,14 +5,71 @@ const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const enemyImagePath = 'src/image/enemy.png';
 const backgroundImagePath = 'src/image/background_1.png';
-const backgroundMusic = new Audio('src/background_music1.mp3');
 const shootSound = new Audio('src/music/shoot.mp3');
 const reloadSound = new Audio('src/music/reload.mp3');
 const getShotSound = new Audio('src/music/getshot.mp3');
 
-backgroundMusic.loop = true; 
-backgroundMusic.volume = 0.2;
+// 获取选关页面和按钮
+const chooseLevelPage = document.getElementById('choose-level-page');
+const level1Button = document.getElementById('level-1-button');
+const level2Button = document.getElementById('level-2-button');
+const level3Button = document.getElementById('level-3-button');
 
+// 获取开始界面和游戏界面
+const gameContainer = document.querySelector('.game-container');
+const gameCover = document.getElementById('game-cover');
+
+// 获取开始按钮
+const startButton = document.getElementById('start-button');
+
+// 监听选关按钮的点击事件
+level1Button.addEventListener('click', () => {
+    startGame(1);  // 跳转到第一关
+});
+
+level2Button.addEventListener('click', () => {
+    startGame(2);  // 跳转到第二关
+});
+
+level3Button.addEventListener('click', () => {
+    startGame(3);  // 跳转到第三关
+});
+
+// 点击开始按钮后显示选关页面
+startButton.addEventListener('click', () => {
+    gameCover.style.display = 'none';
+    chooseLevelPage.style.display = 'flex';  // 显示选关页面
+});
+
+// 跳转到游戏界面并开始指定关卡
+function startGame(level) {
+    chooseLevelPage.style.display = 'none'; // 隐藏选关页面
+    gameContainer.style.display = 'block';   // 显示游戏界面
+
+    // 初始化游戏关卡，按照关卡加载对应的敌人等内容
+    initializeLevel(level);
+}
+
+// 初始化关卡内容（例如敌人数量、背景、难度等）
+function initializeLevel(level) {
+    console.log(`Loading level ${level}`);
+    
+    // 在这里根据不同关卡设置不同的游戏内容
+    if (level === 1) {
+        level = 1; // 第一关
+        // 初始化第一关的敌人等
+    } else if (level === 2) {
+        level = 2; // 第二关
+        // 初始化第二关的敌人等
+    } else if (level === 3) {
+        level = 3; // 第三关
+        // 初始化第三关的敌人等
+    }
+
+    // 可根据关卡设置其他游戏内容
+}
+
+// 背景和敌人图像
 const enemyImage = new Image();
 const backgroundImage = new Image();
 enemyImage.src = enemyImagePath;
@@ -21,28 +78,10 @@ const gunImage = new Image();
 const gun = new Gun(canvas, 'src/image/gun.png');
 
 let level = 1; 
-
 let score = 0;
 const scoreDisplay = document.getElementById('scoreDisplay');
-
 let time = 0; 
 const timerDisplay = document.getElementById('timerDisplay');
-
-const startButton = document.getElementById('start-button');
-const gameCover = document.getElementById('game-cover');
-const gameContainer = document.querySelector('.game-container');
-
-startButton.addEventListener('click', () => {
-  gameCover.style.display = 'none';
-  gameContainer.style.display = 'block';
-
-  document.getElementById('scoreDisplay').style.display = 'block';
-  document.getElementById('timerDisplay').style.display = 'block';
-  backgroundMusic.play();
-  startEnemyMovement();
-  setInterval(updateTimer, 1000);
-});
-
 
 const numEnemies = 10; 
 const enemies = []; 
@@ -58,7 +97,6 @@ const enemySpawnPoints = [
   { x: 650, y: 400 },
   { x: 800, y: 150 }
 ];
-
 
 const sniperScope = new SniperScope(canvas); 
 let canShoot = true; 
@@ -97,8 +135,7 @@ sniperScope.onShoot = (mouseX, mouseY) => {
   }, 2000);
 };
 
-
-
+// 生成敌人
 function generateEnemy() {
   for (let i = 0; i < numEnemies; i++) {
     const spawnPoint = enemySpawnPoints[i % enemySpawnPoints.length];
@@ -122,7 +159,10 @@ backgroundImage.onload = () => {
   drawEnemies();
   gun.updateGun();
   startEnemyMovement();
-  startBackgroundMusic();
+};
+
+backgroundImage.onerror = () => {
+  console.error("Failed to load background image:", backgroundImagePath);
 };
 
 function drawBackground() {
@@ -159,10 +199,6 @@ function moveEnemies() {
       enemy.speedY = -enemy.speedY;
     }
   });
-}
-
-function startBackgroundMusic() {
-  backgroundMusic.play(); 
 }
 
 function startEnemyMovement() {
@@ -218,6 +254,4 @@ function resetGame() {
   generateEnemy();
   drawEnemies();
   startEnemyMovement();
-  startBackgroundMusic(); 
 }
-
