@@ -1,4 +1,4 @@
-const enemyImagePath = 'src/image/enemy.png';
+const enemyImagePath = '../src/image/enemy.png';
 const enemyImage = new Image();
 enemyImage.src = enemyImagePath;
 

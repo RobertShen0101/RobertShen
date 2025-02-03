@@ -4,10 +4,13 @@ import { generateEnemies, drawEnemies, startEnemyMovement, checkHit, resetEnemie
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-const backgroundImagePath = 'src/image/background_1.png';
-const shootSound = new Audio('src/music/shoot.mp3');
-const reloadSound = new Audio('src/music/reload.mp3');
-const getShotSound = new Audio('src/music/getshot.mp3');
+canvas.width = 1400; // 设置 Canvas 宽度
+canvas.height = 800; // 设置 Canvas 高度
+
+const backgroundImagePath = '../src/image/background_1.png';
+const shootSound = new Audio('../src/music/shoot.mp3');
+const reloadSound = new Audio('../src/music/reload.mp3');
+const getShotSound = new Audio('../src/music/getshot.mp3');
 
 const chooseLevelPage = document.getElementById('choose-level-page');
 const gameContainer = document.querySelector('.game-container');
@@ -54,12 +57,13 @@ function resetGame() {
 
 // 绘制背景
 function drawBackground() {
-    if (!backgroundImage.complete) {
+    if (backgroundImage.complete) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // 清空 Canvas
+        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height); // 绘制背景
+        //console.log("Background image loaded");
+    } else {
         console.log("Background image not loaded yet");
-        return;
     }
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
 }
 
 // 监听狙击枪开火
