@@ -60,7 +60,6 @@ function drawBackground() {
     if (backgroundImage.complete) {
         ctx.clearRect(0, 0, canvas.width, canvas.height); // 清空 Canvas
         ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height); // 绘制背景
-        //console.log("Background image loaded");
     } else {
         console.log("Background image not loaded yet");
     }

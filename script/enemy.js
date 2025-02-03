@@ -34,7 +34,7 @@ export function generateEnemies() {
 export function drawEnemies(ctx) {
   enemies.forEach(enemy => {
     if (enemy.image) {
-      ctx.drawImage(enemy.image, enemy.x, enemy.y, enemy.width, enemy.height);
+      ctx.drawImage(enemyImage, enemy.x, enemy.y, enemy.width, enemy.height);
     }
   });
 }
