@@ -21,6 +21,7 @@ const timerDisplay = document.getElementById('timerDisplay');
 
 let level = 1;
 let score = 0;
+let bullets = 15; 
 let canShoot = true;
 
 const gun = new Gun(canvas, 'src/image/gun.png');
@@ -79,12 +80,14 @@ function startGame(selectedLevel) {
 
 
 function resetGame() {
-    console.log("Resetting game...");
     score = 0;
+    bullets = 15; // 重新补满子弹
+    updateBulletDisplay();
     enemyManager.resetEnemies();
     enemyManager.startEnemyMovement(ctx, canvas, drawBackground, gun);
     updateScore();
 }
+
 
 function drawBackground() {
     if (backgroundImage.complete) {
@@ -96,8 +99,15 @@ function drawBackground() {
 }
 
 sniperScope.onShoot = (mouseX, mouseY) => {
-    console.log("Shot fired at:", mouseX, mouseY); // 调试日志
-    if (!canShoot) return;
+    if (!canShoot || bullets <= 0) return;
+
+    bullets--; // 每次射击消耗 1 子弹
+    updateBulletDisplay();
+
+    if (bullets === 0) {
+        setTimeout(() => gameOver(), 500); // 让子弹归零后稍微延迟一下再 Game Over
+        return;
+    }
 
     shootSound.play();
     const rect = canvas.getBoundingClientRect();
@@ -108,13 +118,10 @@ sniperScope.onShoot = (mouseX, mouseY) => {
     const y = (mouseY - rect.top) * scaleY;
 
     if (enemyManager.checkHit(x, y)) {
-        console.log("Enemy hit!");
         getShotSound.play();
         score++;
         updateScore();
         checkWinCondition();
-    } else {
-        console.log("Missed shot.");
     }
 
     canShoot = false;
@@ -126,6 +133,15 @@ sniperScope.onShoot = (mouseX, mouseY) => {
         reloadingText.style.display = 'none';
     }, 2000);
 };
+
+function gameOver() {
+    alert("Out of bullets! Game Over!");
+    gameContainer.style.display = 'none';
+    chooseLevelPage.style.display = 'flex';
+    chooseLevelPage.classList.remove('blurred');
+    resetGame();
+}
+
 
 function updateScore() {
     scoreDisplay.textContent = `Score: ${score}`;
@@ -175,6 +191,11 @@ backgroundImage.onload = () => {
     resetGame();
 };
 
+function updateBulletDisplay() {
+    bulletDisplay.textContent = `Bullets: ${bullets}`;
+}
+
+
 let reloadingText = document.getElementById('reloading-text');
 if (!reloadingText) {
     reloadingText = document.createElement('div');
@@ -189,5 +210,15 @@ if (!reloadingText) {
     reloadingText.style.display = 'none';
     document.body.appendChild(reloadingText);
 }
+
+const bulletDisplay = document.createElement('div');
+bulletDisplay.id = 'bullet-display';
+bulletDisplay.style.position = 'absolute';
+bulletDisplay.style.top = '20px';
+bulletDisplay.style.right = '50px';
+bulletDisplay.style.fontSize = '24px';
+bulletDisplay.style.color = 'black';
+bulletDisplay.style.fontWeight = 'bold';
+document.body.appendChild(bulletDisplay);
 
 
