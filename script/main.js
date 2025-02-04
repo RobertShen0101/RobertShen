@@ -1,11 +1,11 @@
 import { SniperScope } from './jingtou.js';
 import { Gun } from './gun.js';
-import { generateEnemies, drawEnemies, startEnemyMovement, checkHit, resetEnemies } from './enemy.js';
+import { EnemyManager } from './enemy.js';
 
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-canvas.width = 1400; // 设置 Canvas 宽度
-canvas.height = 800; // 设置 Canvas 高度
+canvas.width = 1400;
+canvas.height = 800;
 
 const backgroundImagePath = '../src/image/background_1.png';
 const shootSound = new Audio('../src/music/shoot.mp3');
@@ -27,21 +27,20 @@ const gun = new Gun(canvas, 'src/image/gun.png');
 const sniperScope = new SniperScope(canvas);
 const backgroundImage = new Image();
 backgroundImage.src = backgroundImagePath;
+const enemyManager = new EnemyManager('../src/image/enemy.png', canvas);
 
-// 监听开始按钮，进入选关页面
 startButton.addEventListener('click', () => {
     gameCover.style.display = 'none';
     chooseLevelPage.style.display = 'flex';
 });
 
-// 监听选关按钮
 ['level-1-button', 'level-2-button', 'level-3-button'].forEach((id, index) => {
     document.getElementById(id).addEventListener('click', () => startGame(index + 1));
 });
 
 function startGame(selectedLevel) {
     chooseLevelPage.style.display = 'none';
-    gameContainer.style.display = 'flex';  // 确保游戏界面可见
+    gameContainer.style.display = 'flex';
     level = selectedLevel;
     resetGame();
 }
@@ -49,32 +48,28 @@ function startGame(selectedLevel) {
 function resetGame() {
     console.log("Resetting game...");
     score = 0;
-    resetEnemies();
-    generateEnemies();  // 确保敌人生成
-    startEnemyMovement(ctx, canvas, drawBackground, gun);
+    enemyManager.resetEnemies();
+    enemyManager.startEnemyMovement(ctx, canvas, drawBackground, gun);
     updateScore();
 }
 
-// 绘制背景
 function drawBackground() {
     if (backgroundImage.complete) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // 清空 Canvas
-        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height); // 绘制背景
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
     } else {
         console.log("Background image not loaded yet");
     }
 }
 
-// 监听狙击枪开火
 sniperScope.onShoot = (mouseX, mouseY) => {
     if (!canShoot) return;
-
     shootSound.play();
     const rect = canvas.getBoundingClientRect();
     const x = mouseX - rect.left;
     const y = mouseY - rect.top;
 
-    if (checkHit(x, y)) {
+    if (enemyManager.checkHit(x, y)) {
         getShotSound.play();
         score++;
         updateScore();
@@ -86,12 +81,10 @@ sniperScope.onShoot = (mouseX, mouseY) => {
     setTimeout(() => canShoot = true, 2000);
 };
 
-// 更新分数显示
 function updateScore() {
     scoreDisplay.textContent = `Score: ${score}`;
 }
 
-// 判断是否通关
 function checkWinCondition() {
     if (score >= 10) {
         alert(`Level ${level} Complete!`);
@@ -100,7 +93,6 @@ function checkWinCondition() {
     }
 }
 
-// 背景加载完成后启动游戏
 backgroundImage.onload = () => {
     console.log("Background image loaded successfully");
     drawBackground();
