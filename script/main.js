@@ -32,17 +32,52 @@ const enemyManager = new EnemyManager('../src/image/enemy.png', canvas);
 startButton.addEventListener('click', () => {
     gameCover.style.display = 'none';
     chooseLevelPage.style.display = 'flex';
+
+    // **确保图片恢复原始状态**
+    const levelImage = document.querySelector('.choose-level-page img');
+    levelImage.style.transform = 'scale(1)';  // 还原初始大小
 });
 
 ['level-1-button', 'level-2-button', 'level-3-button'].forEach((id, index) => {
-    document.getElementById(id).addEventListener('click', () => startGame(index + 1));
+    const button = document.getElementById(id);
+    
+    // 让按钮可以通过 CSS 定位
+    button.style.position = 'absolute';
+    
+    // 设置按钮的默认位置，你可以修改这些值
+    const positions = [
+        { top: '200px', left: '500px' },
+        { top: '400px', left: '600px' },
+        { top: '600px', left: '700px' }
+    ];
+
+    button.style.top = positions[index].top;
+    button.style.left = positions[index].left;
+
+    // 添加点击事件
+    button.addEventListener('click', () => startGame(index + 1));
 });
 
+
 function startGame(selectedLevel) {
-    chooseLevelPage.style.display = 'none';
-    gameContainer.style.display = 'flex';
-    level = selectedLevel;
-    resetGame();
+    const levelImage = document.querySelector('.choose-level-page img');
+
+    // **1. 先执行图片放大**
+    levelImage.style.transition = 'transform 1.5s ease';  // 添加动画
+    levelImage.style.transform = 'scale(1.5)';
+
+    // **2. 延迟触发背景虚化**
+    setTimeout(() => {
+        chooseLevelPage.classList.add('blurred');  // 启动背景虚化
+    }, 500); // 等图片开始放大后再虚化
+
+    // **3. 等动画完成后切换到游戏页面**
+    setTimeout(() => {
+        chooseLevelPage.style.display = 'none';
+        gameContainer.style.display = 'flex';
+        level = selectedLevel;
+        resetGame();
+    }, 1000); // 1.5秒后进入游戏界面
 }
 
 function resetGame() {
@@ -67,22 +102,21 @@ sniperScope.onShoot = (mouseX, mouseY) => {
     if (!canShoot) return;
 
     shootSound.play();
-    const rect = canvas.getBoundingClientRect(); // 获取 Canvas 的实际位置
-    const scaleX = canvas.width / rect.width;   // 计算 X 轴缩放比
-    const scaleY = canvas.height / rect.height; // 计算 Y 轴缩放比
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
 
-    // 转换鼠标坐标到 Canvas 坐标
     const x = (mouseX - rect.left) * scaleX;
     const y = (mouseY - rect.top) * scaleY;
 
     if (enemyManager.checkHit(x, y)) {
-        console.log("Enemy hit!"); // 调试日志
+        console.log("Enemy hit!");
         getShotSound.play();
         score++;
         updateScore();
         checkWinCondition();
     } else {
-        console.log("Missed shot."); // 调试日志
+        console.log("Missed shot.");
     }
 
     canShoot = false;
@@ -91,10 +125,9 @@ sniperScope.onShoot = (mouseX, mouseY) => {
     setTimeout(() => reloadSound.play(), 800);
     setTimeout(() => {
         canShoot = true;
-        reloadingText.style.display = 'none';},
-        2000);
+        reloadingText.style.display = 'none';
+    }, 2000);
 };
-
 
 function updateScore() {
     scoreDisplay.textContent = `Score: ${score}`;
@@ -104,6 +137,9 @@ function checkWinCondition() {
     if (score >= 10) {
         alert(`Level ${level} Complete!`);
         level++;
+        gameContainer.style.display = 'none';
+        chooseLevelPage.style.display = 'flex';
+        chooseLevelPage.classList.remove('blurred'); // 清除虚化
         resetGame();
     }
 }
@@ -129,6 +165,6 @@ if (!reloadingText) {
     reloadingText.style.color = 'red';
     reloadingText.style.fontSize = '24px';
     reloadingText.style.fontWeight = 'bold';
-    reloadingText.style.display = 'none'; // 默认隐藏
+    reloadingText.style.display = 'none';
     document.body.appendChild(reloadingText);
 }
