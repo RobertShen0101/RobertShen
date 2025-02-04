@@ -70,6 +70,7 @@ export class EnemyManager {
   checkHit(x, y) {
     for (let i = 0; i < this.enemies.length; i++) {
       const enemy = this.enemies[i];
+      console.log(`Checking hit at (${x}, ${y}) against enemy at (${enemy.x}, ${enemy.y})`);
       if (x >= enemy.x && x <= enemy.x + enemy.width &&
           y >= enemy.y && y <= enemy.y + enemy.height) {
         this.removeEnemy(i);

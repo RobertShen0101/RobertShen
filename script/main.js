@@ -63,23 +63,33 @@ function drawBackground() {
 }
 
 sniperScope.onShoot = (mouseX, mouseY) => {
+    console.log("Shot fired at:", mouseX, mouseY); // 调试日志
     if (!canShoot) return;
+
     shootSound.play();
-    const rect = canvas.getBoundingClientRect();
-    const x = mouseX - rect.left;
-    const y = mouseY - rect.top;
+    const rect = canvas.getBoundingClientRect(); // 获取 Canvas 的实际位置
+    const scaleX = canvas.width / rect.width;   // 计算 X 轴缩放比
+    const scaleY = canvas.height / rect.height; // 计算 Y 轴缩放比
+
+    // 转换鼠标坐标到 Canvas 坐标
+    const x = (mouseX - rect.left) * scaleX;
+    const y = (mouseY - rect.top) * scaleY;
 
     if (enemyManager.checkHit(x, y)) {
+        console.log("Enemy hit!"); // 调试日志
         getShotSound.play();
         score++;
         updateScore();
         checkWinCondition();
+    } else {
+        console.log("Missed shot."); // 调试日志
     }
 
     canShoot = false;
     setTimeout(() => reloadSound.play(), 800);
     setTimeout(() => canShoot = true, 2000);
 };
+
 
 function updateScore() {
     scoreDisplay.textContent = `Score: ${score}`;
