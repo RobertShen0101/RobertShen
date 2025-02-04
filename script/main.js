@@ -86,8 +86,13 @@ sniperScope.onShoot = (mouseX, mouseY) => {
     }
 
     canShoot = false;
+    reloadingText.textContent = "Reloading...";
+    reloadingText.style.display = 'block';
     setTimeout(() => reloadSound.play(), 800);
-    setTimeout(() => canShoot = true, 2000);
+    setTimeout(() => {
+        canShoot = true;
+        reloadingText.style.display = 'none';},
+        2000);
 };
 
 
@@ -112,3 +117,18 @@ backgroundImage.onload = () => {
 backgroundImage.onerror = () => {
     console.error("Failed to load background image:", backgroundImagePath);
 };
+
+let reloadingText = document.getElementById('reloading-text');
+if (!reloadingText) {
+    reloadingText = document.createElement('div');
+    reloadingText.id = 'reloading-text';
+    reloadingText.style.position = 'absolute';
+    reloadingText.style.bottom = '20px';
+    reloadingText.style.left = '50%';
+    reloadingText.style.transform = 'translateX(-50%)';
+    reloadingText.style.color = 'red';
+    reloadingText.style.fontSize = '24px';
+    reloadingText.style.fontWeight = 'bold';
+    reloadingText.style.display = 'none'; // 默认隐藏
+    document.body.appendChild(reloadingText);
+}
