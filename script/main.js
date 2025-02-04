@@ -46,9 +46,9 @@ startButton.addEventListener('click', () => {
     
     // 设置按钮的默认位置，你可以修改这些值
     const positions = [
-        { top: '200px', left: '500px' },
-        { top: '400px', left: '600px' },
-        { top: '600px', left: '700px' }
+        { top: '300px', left: '900px' },
+        { top: '600px', left: '700px' },
+        { top: '550px', left: '1000px' }
     ];
 
     button.style.top = positions[index].top;
@@ -60,25 +60,23 @@ startButton.addEventListener('click', () => {
 
 
 function startGame(selectedLevel) {
-    const levelImage = document.querySelector('.choose-level-page img');
+    const chooseLevelImage = document.querySelector('.choose-level-page img');
 
-    // **1. 先执行图片放大**
-    levelImage.style.transition = 'transform 1.5s ease';  // 添加动画
-    levelImage.style.transform = 'scale(1.5)';
+    // 先加上类名，让它执行放大动画
+    chooseLevelPage.classList.add('zoom-out');
 
-    // **2. 延迟触发背景虚化**
     setTimeout(() => {
-        chooseLevelPage.classList.add('blurred');  // 启动背景虚化
-    }, 500); // 等图片开始放大后再虚化
+        chooseLevelPage.classList.add('blurred'); // 启动背景虚化
+    }, 100); // 确保动画先开始
 
-    // **3. 等动画完成后切换到游戏页面**
     setTimeout(() => {
         chooseLevelPage.style.display = 'none';
         gameContainer.style.display = 'flex';
         level = selectedLevel;
         resetGame();
-    }, 1000); // 1.5秒后进入游戏界面
+    }, 1500);
 }
+
 
 function resetGame() {
     console.log("Resetting game...");
@@ -133,25 +131,48 @@ function updateScore() {
     scoreDisplay.textContent = `Score: ${score}`;
 }
 
+let unlockedLevels = localStorage.getItem('unlockedLevels') 
+    ? JSON.parse(localStorage.getItem('unlockedLevels')) 
+    : 1;
+
+// 初始化按钮状态
+function updateLevelButtons() {
+    for (let i = 1; i <= 3; i++) {
+        const button = document.getElementById(`level-${i}-button`);
+        if (i <= unlockedLevels) {
+            button.disabled = false; // 解锁已完成的关卡
+        } else {
+            button.disabled = true;  // 锁定未解锁的关卡
+        }
+    }
+}
+
+// 通关检测
 function checkWinCondition() {
     if (score >= 10) {
         alert(`Level ${level} Complete!`);
-        level++;
+        
+        if (level < 3) { // 最高解锁到 Level 3
+            unlockedLevels = Math.max(unlockedLevels, level + 1);
+            localStorage.setItem('unlockedLevels', JSON.stringify(unlockedLevels));
+        }
+        
         gameContainer.style.display = 'none';
         chooseLevelPage.style.display = 'flex';
-        chooseLevelPage.classList.remove('blurred'); // 清除虚化
+        chooseLevelPage.classList.remove('blurred');
+        updateLevelButtons(); // 更新按钮状态
         resetGame();
     }
 }
+
+// 页面加载时恢复解锁状态
+updateLevelButtons();
+
 
 backgroundImage.onload = () => {
     console.log("Background image loaded successfully");
     drawBackground();
     resetGame();
-};
-
-backgroundImage.onerror = () => {
-    console.error("Failed to load background image:", backgroundImagePath);
 };
 
 let reloadingText = document.getElementById('reloading-text');
@@ -168,3 +189,5 @@ if (!reloadingText) {
     reloadingText.style.display = 'none';
     document.body.appendChild(reloadingText);
 }
+
+

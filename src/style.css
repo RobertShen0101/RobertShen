@@ -104,17 +104,19 @@ canvas#gameCanvas {
 }
 
 .choose-level-page {
-  position: absolute;
-  width: 100%;
-  height: 100%;
+  position: fixed; /* 让它覆盖整个页面 */
+  top: 0;
+  left: 0;
+  width: 100vw; /* 宽度填满整个视口 */
+  height: 100vh; /* 高度填满整个视口 */
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  background-color: rgba(0, 0, 0, 0.7);  /* 半透明背景 */
-  overflow: hidden;
-  transition: filter 1s ease; /* 设置过渡效果 */
+  background-color: rgba(0, 0, 0, 0.7); /* 半透明背景 */
+  transition: filter 1s ease;
 }
+
 
 .choose-level-page.blurred {
   filter: blur(5px); /* 虚化效果 */
@@ -122,6 +124,13 @@ canvas#gameCanvas {
 
 
 .choose-level-page img {
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 1.5s ease, opacity 1.5s ease;
+}
+
+/* 点击 Level 按钮后才执行放大动画 */
+.choose-level-page.zoom-out img {
   animation: zoomOutAndFade 1.5s forwards;
 }
 
@@ -152,3 +161,8 @@ canvas#gameCanvas {
   color: black;
 }
 
+button:disabled {
+  background-color: gray;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
