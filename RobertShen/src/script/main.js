@@ -8,14 +8,14 @@ canvas.width = 1400;
 canvas.height = 800;
 
 const backgroundImagesPath = {
-    1: '../src/image/background_1.png',
-    2: '../src/image/background_2.jpg',
-    3: '../src/image/background_3.png'
+    1: 'src/image/background_1.png',
+    2: 'src/image/background_2.jpg',
+    3: 'src/image/background_3.png'
 };
 
-const shootSound = new Audio('../src/music/shoot.mp3');
-const reloadSound = new Audio('../src/music/reload.mp3');
-const getShotSound = new Audio('../src/music/getshot.mp3');
+const shootSound = new Audio('src/music/shoot.mp3');
+const reloadSound = new Audio('src/music/reload.mp3');
+const getShotSound = new Audio('src/music/getshot.mp3');
 
 const chooseLevelPage = document.getElementById('choose-level-page');
 const gameContainer = document.querySelector('.game-container');
@@ -33,7 +33,7 @@ const gun = new Gun(canvas, 'src/image/gun.png');
 const sniperScope = new SniperScope(canvas);
 const backgroundImage = new Image();
 //backgroundImage.src = backgroundImagePath;
-const enemyManager = new EnemyManager('../src/image/enemy.png', canvas);
+const enemyManager = new EnemyManager('src/image/enemy.png', canvas);
 
 startButton.addEventListener('click', () => {
     level = 1; // 确保每次进入游戏，默认从第一关开始

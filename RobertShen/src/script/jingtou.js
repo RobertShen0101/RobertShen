@@ -15,7 +15,7 @@ export class SniperScope {
   }
 
   initScope() {
-      this.scope.style.backgroundImage = 'url("../src/image/jingtou.png")';
+      this.scope.style.backgroundImage = 'url("src/image/jingtou.png")';
       this.scope.style.backgroundSize = 'cover';
       this.scope.style.width = `${this.scopeSize}px`;
       this.scope.style.height = `${this.scopeSize}px`;
