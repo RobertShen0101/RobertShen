@@ -129,10 +129,10 @@ canvas#gameCanvas {
   transition: transform 1.5s ease, opacity 1.5s ease;
 }
 
-/* 点击 Level 按钮后才执行放大动画 */
-.choose-level-page.zoom-out img {
+.choose-level-page img.zoom-out {
   animation: zoomOutAndFade 1.5s forwards;
 }
+
 
 .level-buttons {
   display: flex;
