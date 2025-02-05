@@ -7,7 +7,12 @@ const ctx = canvas.getContext('2d');
 canvas.width = 1400;
 canvas.height = 800;
 
-const backgroundImagePath = '../src/image/background_1.png';
+const backgroundImagesPath = {
+    1: '../src/image/background_1.png',
+    2: '../src/image/background_2.jpg',
+    3: '../src/image/background_3.png'
+};
+
 const shootSound = new Audio('../src/music/shoot.mp3');
 const reloadSound = new Audio('../src/music/reload.mp3');
 const getShotSound = new Audio('../src/music/getshot.mp3');
@@ -27,7 +32,7 @@ let canShoot = true;
 const gun = new Gun(canvas, 'src/image/gun.png');
 const sniperScope = new SniperScope(canvas);
 const backgroundImage = new Image();
-backgroundImage.src = backgroundImagePath;
+//backgroundImage.src = backgroundImagePath;
 const enemyManager = new EnemyManager('../src/image/enemy.png', canvas);
 
 startButton.addEventListener('click', () => {
@@ -64,20 +69,25 @@ function startGame(selectedLevel) {
 
     level = selectedLevel;  // 记录当前关卡
 
+    // **切换背景图片**
+    backgroundImage.src = backgroundImagesPath[level];
+    drawBackground();
+
     // **让按钮先消失**
     levelButtons.style.display = 'none';
 
-    // **等待一点时间再执行放大动画**
+    // **等一会儿再执行放大动画**
     setTimeout(() => {
         chooseLevelImage.classList.add('zoom-out');
-    }, 200); // 这里可以调整时间
+    }, 200);
 
     setTimeout(() => {
         chooseLevelPage.style.display = 'none';
         gameContainer.style.display = 'flex';
         resetGame();
-    }, 1500); // 保持和 zoomOutAndFade 动画时长一致
+    }, 1500);
 }
+
 
 
 
@@ -88,6 +98,7 @@ function resetGame() {
     enemyManager.resetEnemies();
     enemyManager.startEnemyMovement(ctx, canvas, drawBackground, gun);
     updateScore();
+    //drawBackground();
 }
 
 
@@ -99,6 +110,7 @@ function drawBackground() {
         console.log("Background image not loaded yet");
     }
 }
+
 
 sniperScope.onShoot = (mouseX, mouseY) => {
     if (!canShoot || bullets <= 0) return;
@@ -181,7 +193,7 @@ function checkWinCondition() {
         document.querySelector('.choose-level-page img').classList.remove('zoom-out');
 
         updateLevelButtons(); // 更新按钮状态
-        resetGame();
+        //resetGame();
     }
 }
 
@@ -194,7 +206,7 @@ updateLevelButtons();
 backgroundImage.onload = () => {
     console.log("Background image loaded successfully");
     drawBackground();
-    resetGame();
+    //resetGame();
 };
 
 function updateBulletDisplay() {
